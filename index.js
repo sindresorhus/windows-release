@@ -2,7 +2,7 @@
 var os = require('os');
 
 var nameMap = {
-	'6.4': '10',
+	'10.0': '10',
 	'6.3': '8.1',
 	'6.2': '8',
 	'6.1': '7',
@@ -15,5 +15,11 @@ var nameMap = {
 };
 
 module.exports = function (release) {
-	return nameMap[(release || os.release()).slice(0, 3)];
+    var version = (release || os.release()).match(/\d+\.\d+/);
+
+    if (!version) {
+        throw new Error('\'release\' argument doesn\'t match \'nn.n\'');
+    }
+
+	return nameMap[version[0]];
 };
