@@ -15,11 +15,11 @@ var nameMap = {
 };
 
 module.exports = function (release) {
-    var version = (release || os.release()).match(/\d+\.\d+/);
+	var version = /\d+\.\d+/.exec(release || os.release());
 
-    if (!version) {
-        throw new Error('\'release\' argument doesn\'t match \'nn.n\'');
-    }
+	if (!version) {
+		throw new Error('`release` argument doesn\'t match `n.n`');
+	}
 
 	return nameMap[version[0]];
 };
