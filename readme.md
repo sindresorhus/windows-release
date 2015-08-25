@@ -42,6 +42,7 @@ Type: `string`
 
 By default the current OS is used, but you can supply a custom release number, which is the output of [`os.release()`](http://nodejs.org/api/os.html#os_os_release).
 
+*Note: Node.js versions lower than 3.1.0 will incorrectly identify Windows 10 as Windows 8.1.*
 
 ## Related
 
