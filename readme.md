@@ -5,7 +5,7 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save win-release
 ```
 
@@ -42,12 +42,11 @@ Type: `string`
 
 By default the current OS is used, but you can supply a custom release number, which is the output of [`os.release()`](http://nodejs.org/api/os.html#os_os_release).
 
-*Note: Node.js versions lower than 3.1.0 will incorrectly identify Windows 10 as Windows 8.1.*
 
 ## Related
 
-- [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system.
-- [osx-release](https://github.com/sindresorhus/osx-release) - Get the name and version of a OS X release from the Darwin version.
+- [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system
+- [osx-release](https://github.com/sindresorhus/osx-release) - Get the name and version of a OS X release from the Darwin version
 
 
 ## License
