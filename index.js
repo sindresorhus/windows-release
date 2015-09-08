@@ -21,11 +21,10 @@ module.exports = function (release) {
 
 	// workaround for Windows 10 on node < 3.1.0
 	if (!release && process.platform === 'win32' &&
-			semver.satisfies(process.version, '>=0.12.0')) {
-		var execSync = require('child_process').execSync;
+		semver.satisfies(process.version, '>=0.12.0')) {
 		try {
-			version = verRe.exec(String(execSync('ver.exe', {timeout: 2000})));
-		} catch (e) {}
+			version = verRe.exec(String(require('child_process').execSync('ver.exe', {timeout: 2000})));
+		} catch (err) {}
 	}
 
 	if (release && !version) {
