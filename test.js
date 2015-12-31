@@ -1,9 +1,7 @@
-'use strict';
-var test = require('ava');
-var winRelease = require('./');
+import test from 'ava';
+import fn from './';
 
-test(function (t) {
-	t.is(winRelease('5.1.2600'), 'XP');
-	t.is(winRelease('10.0.10240'), '10');
-	t.end();
+test(t => {
+	t.is(fn('5.1.2600'), 'XP');
+	t.is(fn('10.0.10240'), '10');
 });
