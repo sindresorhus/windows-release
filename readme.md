@@ -13,8 +13,8 @@ $ npm install --save win-release
 ## Usage
 
 ```js
-var os = require('os');
-var winRelease = require('win-release');
+const os = require('os');
+const winRelease = require('win-release');
 
 // on a Windows XP system
 
@@ -46,9 +46,9 @@ By default the current OS is used, but you can supply a custom release number, w
 ## Related
 
 - [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system
-- [osx-release](https://github.com/sindresorhus/osx-release) - Get the name and version of a macOS release from the Darwin version
+- [macos-release](https://github.com/sindresorhus/macos-release) - Get the name and version of a macOS release from the Darwin version
 
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

@@ -1,7 +1,7 @@
 import test from 'ava';
-import fn from './';
+import m from './';
 
 test(t => {
-	t.is(fn('5.1.2600'), 'XP');
-	t.is(fn('10.0.10240'), '10');
+	t.is(m('5.1.2600'), 'XP');
+	t.is(m('10.0.10240'), '10');
 });
