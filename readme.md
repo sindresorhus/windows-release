@@ -46,7 +46,7 @@ By default the current OS is used, but you can supply a custom release number, w
 ## Related
 
 - [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system
-- [osx-release](https://github.com/sindresorhus/osx-release) - Get the name and version of a OS X release from the Darwin version
+- [osx-release](https://github.com/sindresorhus/osx-release) - Get the name and version of a macOS release from the Darwin version
 
 
 ## License
