@@ -19,12 +19,12 @@ const nameMap = {
 	'4.0': '95'
 };
 
-module.exports = function (release) {
+module.exports = release => {
 	const rel = release || os.release();
 	const verRe = /\d+\.\d+/;
 	const version = verRe.exec(rel);
 
-	if (rel && !version) {
+	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
 	}
 
@@ -32,8 +32,8 @@ module.exports = function (release) {
 
 	// Server 2008, 2012 and 2016 version are ambiguous with desktop release versions
 	if (!release && ['6.1', '6.2', '6.3', '10.0'].indexOf(ver) !== -1) {
-		const child = execa.sync('wmic', ['os', 'get', 'Caption']);
-		const year = ((child.stdout || '').match(/2008|2012|2016/) || [])[0];
+		const stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
+		const year = (stdout.match(/2008|2012|2016/) || [])[0];
 		if (year) {
 			return `Server ${year}`;
 		}
