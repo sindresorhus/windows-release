@@ -34,13 +34,19 @@ winRelease('4.9.3000');
 
 ## API
 
-### winRelease([release])
+### winRelease([release], [fullName])
 
 #### release
 
 Type: `string`
 
 By default the current OS is used, but you can supply a custom release number, which is the output of [`os.release()`](http://nodejs.org/api/os.html#os_os_release).
+
+#### fullName
+
+Type: `bool` (optional)
+
+For some Windows releases, the build number must be used to detect the specific OS (ie. Windows Server editions).
 
 
 ## Related
