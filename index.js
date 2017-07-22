@@ -1,5 +1,4 @@
 /* eslint-disable quote-props */
-
 'use strict';
 const os = require('os');
 const execa = require('execa');
@@ -20,8 +19,7 @@ const nameMap = {
 };
 
 module.exports = release => {
-	const verRe = /\d+\.\d+/;
-	const version = verRe.exec(release || os.release());
+	const version = /\d+\.\d+/.exec(release || os.release());
 
 	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
