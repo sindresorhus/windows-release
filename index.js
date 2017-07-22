@@ -20,9 +20,8 @@ const nameMap = {
 };
 
 module.exports = release => {
-	const rel = release || os.release();
 	const verRe = /\d+\.\d+/;
-	const version = verRe.exec(rel);
+	const version = verRe.exec(release || os.release());
 
 	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
