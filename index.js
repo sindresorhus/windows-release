@@ -29,7 +29,7 @@ module.exports = release => {
 
 	const ver = (version || [])[0];
 
-	// Server 2008, 2012 and 2016 version are ambiguous with desktop release versions
+	// Server 2008, 2012 and 2016 versions are ambiguous with desktop versions
 	if (!release && ['6.1', '6.2', '6.3', '10.0'].indexOf(ver) !== -1) {
 		const stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
