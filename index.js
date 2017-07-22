@@ -2,6 +2,20 @@
 var os = require('os');
 var semver = require('semver');
 
+var fullNameMap = {
+ '6.1.7600': 'Windows 7',
+ '6.1.7601': 'Windows 7, SP1',
+ '6.1.7600.16385': 'Windows Server 2008 R2',
+ '6.1.7601': 'Windows Server 2008 R2, SP1',
+ '6.1.8400': 'Windows Home Server 2011',
+ '6.2.9200': 'Windows 8, Windows Server 2012',
+ '6.3.9200': 'Windows 8.1, Windows Server 2012 R2',
+ '6.3.9600': 'Windows 8.1, Update 1',
+ '10.0.10240': 'Windows 10',
+ '10.0.10586': 'Windows 10 (1511)',
+ '10.0.14393': 'Windows 10 (1607), Windows Server 2016',
+};
+
 var nameMap = {
 	'10.0': '10',
 	'6.3': '8.1',
@@ -15,7 +29,10 @@ var nameMap = {
 	'4.0': '95'
 };
 
-module.exports = function (release) {
+module.exports = function (release, fullName) {
+	if (fullName) {
+		return fullNameMap[release || os.release()];
+	}
 	var verRe = /\d+\.\d+/;
 	var version = verRe.exec(release || os.release());
 
