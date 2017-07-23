@@ -6,7 +6,7 @@
 ## Install
 
 ```
-$ npm install --save win-release
+$ npm install win-release
 ```
 
 
@@ -16,7 +16,7 @@ $ npm install --save win-release
 const os = require('os');
 const winRelease = require('win-release');
 
-// on a Windows XP system
+// On a Windows XP system
 
 winRelease();
 //=> 'XP'
@@ -40,9 +40,10 @@ winRelease('4.9.3000');
 
 Type: `string`
 
-By default the current OS is used, but you can supply a custom release number, which is the output of [`os.release()`](http://nodejs.org/api/os.html#os_os_release).
+By default, the current OS is used, but you can supply a custom release number, which is the output of [`os.release()`](https://nodejs.org/api/os.html#os_os_release).
 
 Note: Most Windows Server versions cannot be detected based on the release number alone. There is runtime detection in place to work around this, but it will only be used if no argument is supplied.
+
 
 ## Related
 
