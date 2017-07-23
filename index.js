@@ -1,13 +1,16 @@
+/* eslint-disable quote-props */
 'use strict';
-var os = require('os');
-var semver = require('semver');
+const os = require('os');
+const execa = require('execa');
 
-var nameMap = {
+// Reference: https://www.gaijin.at/en/lstwinver.php
+const nameMap = {
 	'10.0': '10',
 	'6.3': '8.1',
 	'6.2': '8',
 	'6.1': '7',
 	'6.0': 'Vista',
+	'5.2': 'Server 2003',
 	'5.1': 'XP',
 	'5.0': '2000',
 	'4.9': 'ME',
@@ -15,21 +18,23 @@ var nameMap = {
 	'4.0': '95'
 };
 
-module.exports = function (release) {
-	var verRe = /\d+\.\d+/;
-	var version = verRe.exec(release || os.release());
-
-	// workaround for Windows 10 on node < 3.1.0
-	if (!release && process.platform === 'win32' &&
-		semver.satisfies(process.version, '>=0.12.0 <3.1.0')) {
-		try {
-			version = verRe.exec(String(require('child_process').execSync('ver.exe', {timeout: 2000})));
-		} catch (err) {}
-	}
+module.exports = release => {
+	const version = /\d+\.\d+/.exec(release || os.release());
 
 	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
 	}
 
-	return nameMap[(version || [])[0]];
+	const ver = (version || [])[0];
+
+	// Server 2008, 2012 and 2016 versions are ambiguous with desktop versions
+	if (!release && ['6.1', '6.2', '6.3', '10.0'].indexOf(ver) !== -1) {
+		const stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
+		const year = (stdout.match(/2008|2012|2016/) || [])[0];
+		if (year) {
+			return `Server ${year}`;
+		}
+	}
+
+	return nameMap[ver];
 };
