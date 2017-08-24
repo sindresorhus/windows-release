@@ -18,7 +18,7 @@ const names = new Map([
 ]);
 
 module.exports = release => {
-	const version = /\d+\.\d+/.exec(release || os.release());
+	const version = /\d+\.\d/.exec(release || os.release());
 
 	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
