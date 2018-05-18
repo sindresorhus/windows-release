@@ -1,4 +1,4 @@
-# win-release [![Build Status](https://travis-ci.org/sindresorhus/win-release.svg?branch=master)](https://travis-ci.org/sindresorhus/win-release)
+# windows-release [![Build Status](https://travis-ci.org/sindresorhus/windows-release.svg?branch=master)](https://travis-ci.org/sindresorhus/windows-release)
 
 > Get the name of a Windows version from the release number: `5.1.2600` → `XP`
 
@@ -6,7 +6,7 @@
 ## Install
 
 ```
-$ npm install win-release
+$ npm install windows-release
 ```
 
 
@@ -14,27 +14,27 @@ $ npm install win-release
 
 ```js
 const os = require('os');
-const winRelease = require('win-release');
+const windowsRelease = require('windows-release');
 
 // On a Windows XP system
 
-winRelease();
+windowsRelease();
 //=> 'XP'
 
 os.release();
 //=> '5.1.2600'
 
-winRelease(os.release());
+windowsRelease(os.release());
 //=> 'XP'
 
-winRelease('4.9.3000');
+windowsRelease('4.9.3000');
 //=> 'ME'
 ```
 
 
 ## API
 
-### winRelease([release])
+### windowsRelease([release])
 
 #### release
 
