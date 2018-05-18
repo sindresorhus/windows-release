@@ -27,10 +27,10 @@ module.exports = release => {
 	const ver = (version || [])[0];
 
 	// Server 2008, 2012 and 2016 versions are ambiguous with desktop versions and must be detected at runtime.
-	// If release is omitted or we're on a windows system, and the version number is an ambiguous version
-	// Then use `wmic` to get the OS caption: https://msdn.microsoft.com/en-us/library/aa394531(v=vs.85).aspx
+	// If `release` is omitted or we're on a Windows system, and the version number is an ambiguous version
+	// then use `wmic` to get the OS caption: https://msdn.microsoft.com/en-us/library/aa394531(v=vs.85).aspx
 	// If the resulting caption contains the year 2008, 2012 or 2016, it is a server version, so return a server OS name.
-	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].indexOf(ver) !== -1) {
+	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(ver)) {
 		const stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
 		if (year) {
