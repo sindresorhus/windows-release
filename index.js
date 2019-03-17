@@ -31,15 +31,15 @@ module.exports = async () => {
 	const productName = productNameRegex.exec(productNameLine)[1];
 
 	// Windows 10 Pro
-	const desktopName = /Windows \d+/.exec(productName);
+	const desktopName = /Windows (\d+)/.exec(productName);
 	if (desktopName !== null) {
-		return desktopName[0];
+		return desktopName[1];
 	}
 
 	// Windows Server 2016 Datacenter
-	const serverName = /Windows Server \d+/.exec(productName);
+	const serverName = /Windows (Server \d+)/.exec(productName);
 	if (serverName !== null) {
-		return serverName[0];
+		return serverName[1];
 	}
 
 	throw new Error('ProductName did not include Windows name');
@@ -66,7 +66,15 @@ module.exports.isServer = async () => {
 	return installationType !== 'Client';
 };
 
-module.exports.sync = (release = os.release()) => {
+module.exports.sync = release => {
+	if (!release) {
+		if (process.platform === 'win32') {
+			release = os.release();
+		} else {
+			throw new Error('`release` argument must be provided on non-Windows platforms');
+		}
+	}
+
 	const regexArray = /\d+\.\d+/.exec(release);
 	if (regexArray === null) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
