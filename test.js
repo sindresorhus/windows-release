@@ -9,7 +9,9 @@ test('async', async t => {
 			t.regex(await m(), /^\d+$/);
 		}
 	} else {
-		t.throwsAsync(m);
+		t.throwsAsync(async () => {
+			await m();
+		});
 	}
 });
 

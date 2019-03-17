@@ -42,7 +42,7 @@ module.exports = async () => {
 		return serverName[1];
 	}
 
-	throw new Error('ProductName did not include Windows name');
+	throw new Error(`ProductName \`${productName}\` did not include Windows name`);
 };
 
 module.exports.isServer = async () => {
