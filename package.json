@@ -12,15 +12,11 @@
 	"engines": {
 		"node": ">=6"
 	},
-	"os": [
-		"win32"
-	],
 	"scripts": {
 		"test": "xo && ava"
 	},
 	"files": [
-		"index.js",
-		"is-windows-server.exe"
+		"index.js"
 	],
 	"keywords": [
 		"os",
@@ -35,9 +31,6 @@
 		"release",
 		"version"
 	],
-	"dependencies": {
-		"mem": "^4.2.0"
-	},
 	"devDependencies": {
 		"ava": "*",
 		"xo": "*"

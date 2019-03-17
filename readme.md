@@ -13,34 +13,26 @@ $ npm install windows-release
 ## Usage
 
 ```js
-const os = require('os');
 const windowsRelease = require('windows-release');
 
+windowsRelease.sync('5.1.2600');
+//=> 'XP'
+
 (async () => {
-  // On a Windows XP system
+  // On a Windows desktop
   await windowsRelease();
-  //=> 'XP'
-
-  os.release();
-  //=> '5.1.2600'
-
-  await windowsRelease(os.release());
-  //=> 'XP'
-
-  // On a Windows 10 desktop client
-  await windowsRelease('10.0')
   //=> '10'
 
-  // On a Windows 10 server (Server 2016)
-  await windowsRelease('10.0')
-  //=> 'Server 2016'
+  // On a Windows server or in a Windows container
+  await windowsRelease();
+  //=> 'Server 2019'
 });
 ```
 
 
 ## API
 
-### windowsRelease([release])
+### windowsRelease()
 
 Returns a `Promise` for the release name.
 
@@ -58,7 +50,7 @@ By default, the current OS is used, but you can supply a custom release number, 
 
 - [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system
 - [macos-release](https://github.com/sindresorhus/macos-release) - Get the name and version of a macOS release from the Darwin version
-- [is-windows-server](https://github.com/MarkTiedemann/is-windows-server) - Binary to distinguish between Windows and Windows Server releases
+
 
 ## License
 
