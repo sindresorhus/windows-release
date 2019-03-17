@@ -1,10 +1,6 @@
 import test from 'ava';
 import m from '.';
 
-test('Promise API', async t => {
-	t.is(await m('10.0'), '10');
-});
-
 // Test using versions strings sourced from https://www.gaijin.at/en/lstwinver.php
 
 test('Windows 95 versions are correctly matched', t => {
@@ -43,50 +39,56 @@ test('Windows Server 2003 versions are correctly matched', t => {
 	versions.forEach(version => t.is(m.sync(version), expected));
 });
 
-test('Windows Vista versions are correctly matched', t => {
-	const expected = 'Vista';
-	const versions = ['6.0.5270',
-		'6.0.5308',
-		'6.0.5342',
-		'6.0.5365',
-		'6.0.5381',
-		'6.0.5384',
-		'6.0.5456',
-		'6.0.5472',
-		'6.0.5536',
-		'6.0.5600.16384',
-		'6.0.5700',
-		'6.0.5728',
-		'6.0.5744.16384',
-		'6.0.5808',
-		'6.0.5824',
-		'6.0.5840',
-		'6.0.6000.16386',
-		'6.0.6000',
-		'6.0.6002'];
-	versions.forEach(version => t.is(m.sync(version), expected));
-});
+if (process.platform === 'win32') {
+	test('Windows Vista versions are correctly matched', t => {
+		const expected = 'Vista';
+		const versions = ['6.0.5270',
+			'6.0.5308',
+			'6.0.5342',
+			'6.0.5365',
+			'6.0.5381',
+			'6.0.5384',
+			'6.0.5456',
+			'6.0.5472',
+			'6.0.5536',
+			'6.0.5600.16384',
+			'6.0.5700',
+			'6.0.5728',
+			'6.0.5744.16384',
+			'6.0.5808',
+			'6.0.5824',
+			'6.0.5840',
+			'6.0.6000.16386',
+			'6.0.6000',
+			'6.0.6002'];
+		versions.forEach(version => t.is(m.sync(version), expected));
+	});
 
-test('Windows 7 versions are correctly matched', t => {
-	const expected = '7';
-	const versions = ['6.1.7600.16385', '6.1.7600', '6.1.7601'];
-	versions.forEach(version => t.is(m.sync(version), expected));
-});
+	test('Windows 7 versions are correctly matched', t => {
+		const expected = '7';
+		const versions = ['6.1.7600.16385', '6.1.7600', '6.1.7601'];
+		versions.forEach(version => t.is(m.sync(version), expected));
+	});
 
-test('Windows 8 versions are correctly matched', t => {
-	const expected = '8';
-	const versions = ['6.2.9200', '6.2.10211'];
-	versions.forEach(version => t.is(m.sync(version), expected));
-});
+	test('Windows 8 versions are correctly matched', t => {
+		const expected = '8';
+		const versions = ['6.2.9200', '6.2.10211'];
+		versions.forEach(version => t.is(m.sync(version), expected));
+	});
 
-test('Windows 8.1 versions are correctly matched', t => {
-	const expected = '8.1';
-	const versions = ['6.3.9200', '6.3.9600'];
-	versions.forEach(version => t.is(m.sync(version), expected));
-});
+	test('Windows 8.1 versions are correctly matched', t => {
+		const expected = '8.1';
+		const versions = ['6.3.9200', '6.3.9600'];
+		versions.forEach(version => t.is(m.sync(version), expected));
+	});
 
-test('Windows 10 versions are correctly matched', t => {
-	const expected = '10';
-	const versions = ['10.0.10240', '10.0.10586', '10.0.14393'];
-	versions.forEach(version => t.is(m.sync(version), expected));
-});
+	test('Windows 10 versions are correctly matched', t => {
+		const expected = '10';
+		const versions = ['10.0.10240', '10.0.10586', '10.0.14393'];
+		versions.forEach(version => t.is(m.sync(version), expected));
+	});
+
+	test('Promise API', async t => {
+		t.is(await m('10.0'), '10');
+	});
+}
