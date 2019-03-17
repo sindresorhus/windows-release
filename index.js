@@ -33,6 +33,8 @@ const serverNames = new Map([
 	['6.0', 'Server 2008']
 ]);
 
+const isServerExe = path.join(__dirname, 'is-windows-server.exe');
+
 module.exports = mem(release => {
 	const version = /\d+\.\d/.exec(release || os.release());
 
@@ -47,7 +49,6 @@ module.exports = mem(release => {
 	}
 
 	return new Promise(resolve => {
-		const isServerExe = path.join(__dirname, 'is-windows-server.exe');
 		childProcess.execFile(isServerExe, {encoding: 'utf-8'}, (_, isServer) => {
 			resolve(isServer === 'true' ? serverNames.get(ver) : clientNames.get(ver));
 		});
@@ -67,11 +68,6 @@ module.exports.sync = mem(release => {
 		return nonAmbiguousNames.get(ver);
 	}
 
-	const isServerExe = path.join(__dirname, 'is-windows-server.exe');
 	const isServer = childProcess.execFileSync(isServerExe).toString('utf-8');
-	if (isServer === 'true') {
-		return serverNames.get(ver);
-	}
-
-	return clientNames.get(ver);
+	return isServer === 'true' ? serverNames.get(ver) : clientNames.get(ver);
 });
