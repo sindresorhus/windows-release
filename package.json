@@ -16,7 +16,8 @@
 		"test": "xo && ava"
 	},
 	"files": [
-		"index.js"
+		"index.js",
+		"is-windows-server.exe"
 	],
 	"keywords": [
 		"os",
@@ -32,7 +33,7 @@
 		"version"
 	],
 	"dependencies": {
-		"execa": "^0.10.0"
+		"mem": "^4.2.0"
 	},
 	"devDependencies": {
 		"ava": "*",
