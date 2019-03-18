@@ -16,7 +16,7 @@
 		"format": "prettier --write \"*.{ts,json,md}\"",
 		"check-format": "prettier --list-different \"*.{ts,json,md}\"",
 		"build": "tsc",
-		"test": "ava --verbose"
+		"test": "ava --verbose --serial"
 	},
 	"files": [
 		"index.js"
