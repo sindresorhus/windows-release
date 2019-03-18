@@ -5,3 +5,8 @@ language: node_js
 node_js:
   - '10'
   - '8'
+scripts:
+  - npm install
+  - npm run check-format
+  - npm run build
+  - npm test

@@ -10,10 +10,13 @@
 		"url": "sindresorhus.com"
 	},
 	"engines": {
-		"node": ">=6"
+		"node": ">=8"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"format": "prettier --write \"*.{ts,json,md}\"",
+		"check-format": "prettier --list-different \"*.{ts,json,md}\"",
+		"build": "tsc",
+		"test": "ava --verbose"
 	},
 	"files": [
 		"index.js"
@@ -33,6 +36,7 @@
 	],
 	"devDependencies": {
 		"ava": "*",
-		"xo": "*"
+		"prettier": "*",
+		"typescript": "*"
 	}
 }
