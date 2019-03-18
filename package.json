@@ -37,6 +37,7 @@
 	"devDependencies": {
 		"ava": "*",
 		"prettier": "*",
-		"typescript": "*"
+		"typescript": "*",
+		"@types/node": "*"
 	}
 }

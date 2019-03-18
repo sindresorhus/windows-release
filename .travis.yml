@@ -6,7 +6,6 @@ node_js:
   - '10'
   - '8'
 script:
-  - npm install
   - npm run check-format
   - npm run build
   - npm test
