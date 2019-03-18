@@ -81,7 +81,7 @@ async function readProductName() {
 export async function _readName(release: string, ...allowedNames: string[]) {
 	const productName = await readProductName();
 
-	if (allowedNames !== undefined) {
+	if (allowedNames.length > 0) {
 		for (const allowedName of allowedNames)
 			if (productName.includes(allowedName)) return allowedName;
 		throw new Error(_errors.ambigiousRelease(release, productName, ...allowedNames));
