@@ -2,24 +2,22 @@
 const childProcess = require('child_process');
 const path = require('path');
 const os = require('os');
+const util = require('util');
 
-const execRegistry = (query, key) => new Promise((resolve, reject) => {
-	const systemRoot = process.env.SystemRoot || 'C:\\Windows';
-	const reg = path.join(systemRoot, 'System32', 'reg.exe');
-	childProcess.execFile(reg, ['query', query, '/v', key], (error, stdout) =>
-		error ? reject(error) : resolve(stdout)
-	);
-});
+const systemRoot = process.env.SystemRoot || 'C:\\Windows';
+const reg = path.join(systemRoot, 'System32', 'reg.exe');
 
-module.exports = async () => {
+const execRegistrySync = (query, key) => childProcess.execFileSync(reg, ['query', query, '/v', key]).toString();
+const execRegistry = (query, key) => util.promisify(childProcess.execFile)(reg, ['query', query, '/v', key]).then(({stdout}) => stdout);
+
+const currentVersion = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion';
+
+const windowsRelease = async () => {
 	if (process.platform !== 'win32') {
 		throw new Error(`platform \`${process.platform}\` is not supported`);
 	}
 
-	const stdout = await execRegistry(
-		'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
-		'ProductName'
-	);
+	const stdout = await execRegistry(currentVersion, 'ProductName');
 	const productNameRegex = /^\s+ProductName\s+REG_SZ\s+(.+)$/;
 	const productNameLine = stdout
 		.split('\r\n')
@@ -45,15 +43,46 @@ module.exports = async () => {
 	throw new Error(`ProductName \`${productName}\` did not include Windows name`);
 };
 
-module.exports.isServer = async () => {
+const windowsReleaseSync = () => {
 	if (process.platform !== 'win32') {
 		throw new Error(`platform \`${process.platform}\` is not supported`);
 	}
 
-	const stdout = await execRegistry(
-		'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion',
-		'InstallationType'
-	);
+	const stdout = execRegistrySync(currentVersion, 'ProductName');
+	const productNameRegex = /^\s+ProductName\s+REG_SZ\s+(.+)$/;
+	const productNameLine = stdout
+		.split('\r\n')
+		.find(line => productNameRegex.test(line));
+	if (productNameLine === undefined) {
+		throw new Error('registry query did not include ProductName');
+	}
+
+	const productName = productNameRegex.exec(productNameLine)[1];
+
+	// Windows 10 Pro
+	const desktopName = /Windows (\d+)/.exec(productName);
+	if (desktopName !== null) {
+		return desktopName[1];
+	}
+
+	// Windows Server 2016 Datacenter
+	const serverName = /Windows (Server \d+)/.exec(productName);
+	if (serverName !== null) {
+		return serverName[1];
+	}
+
+	throw new Error(`ProductName \`${productName}\` did not include Windows name`);
+};
+
+module.exports = windowsRelease;
+module.exports.sync = windowsReleaseSync;
+
+const isServer = async () => {
+	if (process.platform !== 'win32') {
+		throw new Error(`platform \`${process.platform}\` is not supported`);
+	}
+
+	const stdout = await execRegistry(currentVersion, 'InstallationType');
 	const installationTypeRegex = /^\s+InstallationType\s+REG_SZ\s+(.+)$/;
 	const installationTypeLine = stdout
 		.split('\r\n')
@@ -66,7 +95,28 @@ module.exports.isServer = async () => {
 	return installationType !== 'Client';
 };
 
-module.exports.sync = release => {
+const isServerSync = () => {
+	if (process.platform !== 'win32') {
+		throw new Error(`platform \`${process.platform}\` is not supported`);
+	}
+
+	const stdout = execRegistrySync(currentVersion, 'InstallationType');
+	const installationTypeRegex = /^\s+InstallationType\s+REG_SZ\s+(.+)$/;
+	const installationTypeLine = stdout
+		.split('\r\n')
+		.find(line => installationTypeRegex.test(line));
+	if (installationTypeLine === undefined) {
+		throw new Error('registry query did not include InstallationType');
+	}
+
+	const installationType = installationTypeRegex.exec(installationTypeLine)[1];
+	return installationType !== 'Client';
+};
+
+module.exports.isServer = isServer;
+module.exports.isServerSync = isServerSync;
+
+const clientSync = release => {
 	if (!release) {
 		if (process.platform === 'win32') {
 			release = os.release();
@@ -93,9 +143,20 @@ module.exports.sync = release => {
 		['5.1', 'XP'],
 		['5.0', '2000']
 	]);
+
+	// TODO: if major version is less, throw unsupported
+	// TODO: if major version is equal but minor is different, throw unsupported
+	// TODO: if major is higher, run fallback
+
 	if (!names.has(version)) {
 		throw new Error(`version \`${version}\` is not supported`);
 	}
 
 	return names.get(version);
 };
+
+module.exports.client = async release => clientSync(release);
+module.exports.clientSync = clientSync;
+
+module.exports.server = async _ => {};
+module.exports.serverSync = _ => {};
