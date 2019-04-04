@@ -1,5 +1,5 @@
-import {expectType} from 'tsd-check';
-import windowsRelease from '.';
+import {expectType} from 'tsd';
+import windowsRelease = require('.');
 
 expectType<string>(windowsRelease());
 expectType<string>(windowsRelease('5.1.2600'));

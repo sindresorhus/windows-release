@@ -42,4 +42,3 @@ const windowsRelease = release => {
 };
 
 module.exports = windowsRelease;
-module.exports.default = windowsRelease;
