@@ -17,7 +17,7 @@ const names = new Map([
 	['4.0', '95']
 ]);
 
-module.exports = release => {
+const windowsRelease = release => {
 	const version = /\d+\.\d/.exec(release || os.release());
 
 	if (release && !version) {
@@ -40,3 +40,5 @@ module.exports = release => {
 
 	return names.get(ver);
 };
+
+module.exports = windowsRelease;
