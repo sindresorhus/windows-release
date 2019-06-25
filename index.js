@@ -31,7 +31,7 @@ const windowsRelease = release => {
 	// then use `wmic` to get the OS caption: https://msdn.microsoft.com/en-us/library/aa394531(v=vs.85).aspx
 	// If the resulting caption contains the year 2008, 2012 or 2016, it is a server version, so return a server OS name.
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(ver)) {
-		const stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
+		const stdout = execa.sync(process.env.WINDIR + '/System32/Wbem/WMIC', ['os', 'get', 'Caption']).stdout || '';
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
 		if (year) {
 			return `Server ${year}`;
