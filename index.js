@@ -39,7 +39,7 @@ const windowsRelease = release => {
 		}
 
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
-		
+
 		if (year) {
 			return `Server ${year}`;
 		}
