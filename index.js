@@ -37,7 +37,9 @@ const windowsRelease = release => {
 		} catch (error) {
 			stdout = execa.sync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
 		}
+
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
+		
 		if (year) {
 			return `Server ${year}`;
 		}
