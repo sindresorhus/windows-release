@@ -34,9 +34,9 @@ const windowsRelease = release => {
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(ver)) {
 		let stdout;
 		try {
-			stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
-		} catch (error) {
 			stdout = execa.sync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
+		} catch (error) {
+			stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
 		}
 
 		const year = (stdout.match(/2008|2012|2016/) || [])[0];
