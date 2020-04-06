@@ -4,10 +4,11 @@
 	"description": "Get the name of a Windows version from the release number: `5.1.2600` → `XP`",
 	"license": "MIT",
 	"repository": "sindresorhus/windows-release",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
 	"engines": {
 		"node": ">=6"
