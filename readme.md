@@ -11,8 +11,8 @@ $ npm install windows-release
 ## Usage
 
 ```js
-const os = require('os');
-const windowsRelease = require('windows-release');
+import os from 'node:os';
+import windowsRelease from 'windows-release';
 
 // On a Windows XP system
 

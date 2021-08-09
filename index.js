@@ -1,9 +1,9 @@
-'use strict';
-const os = require('os');
-const execa = require('execa');
+import os from 'node:os';
+import execa from 'execa';
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
 const names = new Map([
+	['11.0', '11'],
 	['10.0', '10'],
 	['6.3', '8.1'],
 	['6.2', '8'],
@@ -14,10 +14,10 @@ const names = new Map([
 	['5.0', '2000'],
 	['4.9', 'ME'],
 	['4.1', '98'],
-	['4.0', '95']
+	['4.0', '95'],
 ]);
 
-const windowsRelease = release => {
+export default function windowsRelease(release) {
 	const version = /\d+\.\d/.exec(release || os.release());
 
 	if (release && !version) {
@@ -47,6 +47,4 @@ const windowsRelease = release => {
 	}
 
 	return names.get(ver);
-};
-
-module.exports = windowsRelease;
+}

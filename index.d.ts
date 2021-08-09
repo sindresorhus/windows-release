@@ -7,8 +7,8 @@ Note: Most Windows Server versions cannot be detected based on the release numbe
 
 @example
 ```
-import * as os from 'os';
-import windowsRelease = require('windows-release');
+import os from 'node:os';
+import windowsRelease from 'windows-release';
 
 // On a Windows XP system
 
@@ -25,6 +25,4 @@ windowsRelease('4.9.3000');
 //=> 'ME'
 ```
 */
-declare function windowsRelease(release?: string): string;
-
-export = windowsRelease;
+export default function windowsRelease(release?: string): string;
