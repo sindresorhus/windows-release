@@ -121,3 +121,12 @@ test('Windows 10 versions are correctly matched', t => {
 		t.is(windowsRelease(version), expected);
 	}
 });
+
+test('Windows 11 versions are correctly matched', t => {
+	const expected = '11';
+	const versions = ['10.0.22000'];
+
+	for (const version of versions) {
+		t.is(windowsRelease(version), expected);
+	}
+});
