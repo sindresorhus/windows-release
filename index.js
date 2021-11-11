@@ -2,6 +2,7 @@ import os from 'node:os';
 import execa from 'execa';
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
+// Windows 11 reference: https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information
 const names = new Map([
 	['10.0.22', '11'],
 	['10.0', '10'],
