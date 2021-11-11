@@ -2,8 +2,9 @@ import os from 'node:os';
 import execa from 'execa';
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
+// Windows 11 reference: https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information
 const names = new Map([
-	['11.0', '11'],
+	['10.0.22', '11'], // It's unclear whether future Windows 11 versions will use this version scheme: https://github.com/sindresorhus/windows-release/pull/26/files#r744945281
 	['10.0', '10'],
 	['6.3', '8.1'],
 	['6.2', '8'],
@@ -12,19 +13,21 @@ const names = new Map([
 	['5.2', 'Server 2003'],
 	['5.1', 'XP'],
 	['5.0', '2000'],
-	['4.9', 'ME'],
-	['4.1', '98'],
-	['4.0', '95'],
+	['4.90', 'ME'],
+	['4.10', '98'],
+	['4.03', '95'],
+	['4.00', '95'],
 ]);
 
 export default function windowsRelease(release) {
-	const version = /\d+\.\d/.exec(release || os.release());
+	const version = /(\d+\.\d+)(?:\.(\d+))?/.exec(release || os.release());
 
 	if (release && !version) {
 		throw new Error('`release` argument doesn\'t match `n.n`');
 	}
 
-	const ver = (version || [])[0];
+	let ver = version[1] || '';
+	const build = version[2] || '';
 
 	// Server 2008, 2012, 2016, and 2019 versions are ambiguous with desktop versions and must be detected at runtime.
 	// If `release` is omitted or we're on a Windows system, and the version number is an ambiguous version
@@ -44,6 +47,11 @@ export default function windowsRelease(release) {
 		if (year) {
 			return `Server ${year}`;
 		}
+	}
+
+	// Windows 11
+	if (ver === '10.0' && build.startsWith('22')) {
+		ver = '10.0.22';
 	}
 
 	return names.get(ver);
