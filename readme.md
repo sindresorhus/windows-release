@@ -4,8 +4,8 @@
 
 ## Install
 
-```
-$ npm install windows-release
+```sh
+npm install windows-release
 ```
 
 ## Usage
@@ -45,15 +45,3 @@ Note: Most Windows Server versions cannot be detected based on the release numbe
 
 - [os-name](https://github.com/sindresorhus/os-name) - Get the name of the current operating system
 - [macos-release](https://github.com/sindresorhus/macos-release) - Get the name and version of a macOS release from the Darwin version
-
----
-
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-windows-release?utm_source=npm-windows-release&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>
