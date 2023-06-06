@@ -4,7 +4,7 @@ import execa from 'execa';
 // Reference: https://www.gaijin.at/en/lstwinver.php
 // Windows 11 reference: https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information
 const names = new Map([
-	['10.0.22', '11'], // It's unclear whether future Windows 11 versions will use this version scheme: https://github.com/sindresorhus/windows-release/pull/26/files#r744945281
+	['10.0.2', '11'], // It's unclear whether future Windows 11 versions will use this version scheme: https://github.com/sindresorhus/windows-release/pull/26/files#r744945281
 	['10.0', '10'],
 	['6.3', '8.1'],
 	['6.2', '8'],
@@ -50,8 +50,8 @@ export default function windowsRelease(release) {
 	}
 
 	// Windows 11
-	if (ver === '10.0' && build.startsWith('22')) {
-		ver = '10.0.22';
+	if (ver === '10.0' && build.startsWith('2')) {
+		ver = '10.0.2';
 	}
 
 	return names.get(ver);
