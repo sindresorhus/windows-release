@@ -1,5 +1,5 @@
 import os from 'node:os';
-import {execa} from 'execa';
+import {execaSync} from 'execa';
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
 // Windows 11 reference: https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information
@@ -37,9 +37,9 @@ export default function windowsRelease(release) {
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(ver)) {
 		let stdout;
 		try {
-			stdout = execa.sync('wmic', ['os', 'get', 'Caption']).stdout || '';
+			stdout = execaSync('wmic', ['os', 'get', 'Caption']).stdout || '';
 		} catch {
-			stdout = execa.sync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
+			stdout = execaSync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
 		}
 
 		const year = (stdout.match(/2008|2012|2016|2019|2022/) || [])[0];
