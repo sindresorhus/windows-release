@@ -42,7 +42,7 @@ export default function windowsRelease(release) {
 			stdout = execaSync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
 		}
 
-		const year = (stdout.match(/2008|2012|2016|2019|2022/) || [])[0];
+		const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
 
 		if (year) {
 			return `Server ${year}`;
