@@ -33,13 +33,15 @@ export default function windowsRelease(release) {
 	// If `release` is omitted or we're on a Windows system, and the version number is an ambiguous version
 	// then use `wmic` to get the OS caption: https://msdn.microsoft.com/en-us/library/aa394531(v=vs.85).aspx
 	// If `wmic` is obsolete (later versions of Windows 10), use PowerShell instead.
-	// If the resulting caption contains the year 2008, 2012, 2016, 2019 or 2022, it is a server version, so return a server OS name.
+	// We force English output using /locale:ms_409 for wmic and setting CurrentUICulture for PowerShell
+	// to ensure year detection works on non-English Windows systems.
+	// If the resulting caption contains the year 2008, 2012, 2016, 2019, 2022, or 2025, it is a server version, so return a server OS name.
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(ver)) {
 		let stdout;
 		try {
-			stdout = execaSync('wmic', ['os', 'get', 'Caption']).stdout || '';
+			stdout = execaSync('wmic', ['/locale:ms_409', 'os', 'get', 'Caption']).stdout || '';
 		} catch {
-			stdout = execaSync('powershell', ['(Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
+			stdout = execaSync('powershell', ['-NoProfile', '-Command', '[Threading.Thread]::CurrentThread.CurrentUICulture = \'en-US\'; (Get-CimInstance -ClassName Win32_OperatingSystem).caption']).stdout || '';
 		}
 
 		const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
