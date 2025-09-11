@@ -130,3 +130,16 @@ test('Windows 11 versions are correctly matched', t => {
 		t.is(windowsRelease(version), expected);
 	}
 });
+
+test('returns undefined for non-existent Windows versions', t => {
+	// Non-existent Windows 10 build numbers (too high)
+	t.is(windowsRelease('10.0.90000'), undefined);
+	t.is(windowsRelease('10.0.50000'), undefined);
+
+	// Non-existent Windows 11 build numbers (too low)
+	t.is(windowsRelease('10.0.21999'), undefined);
+	t.is(windowsRelease('10.0.20000'), undefined);
+
+	// Gap between Windows 10 and 11
+	t.is(windowsRelease('10.0.21000'), undefined);
+});

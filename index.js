@@ -51,9 +51,19 @@ export default function windowsRelease(release) {
 		}
 	}
 
-	// Windows 11
-	if (ver === '10.0' && build.startsWith('2')) {
-		ver = '10.0.2';
+	// Windows 11 and Windows 10 build number validation for version 10.0
+	if (ver === '10.0' && build) {
+		const buildNumber = Number.parseInt(build, 10);
+
+		if (buildNumber >= 22_000 && buildNumber <= 30_000) {
+			// Windows 11: build 22000 to 30000 (reasonable upper bound for future versions)
+			ver = '10.0.2';
+		} else if (buildNumber >= 10_240 && buildNumber <= 19_045) {
+			// Windows 10: build 10240 to 19045 - keep ver as '10.0'
+		} else {
+			// Invalid build number - return undefined
+			return undefined;
+		}
 	}
 
 	return names.get(ver);

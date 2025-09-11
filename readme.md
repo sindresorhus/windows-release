@@ -33,6 +33,10 @@ windowsRelease('4.9.3000');
 
 ### windowsRelease(release?)
 
+Returns: `string | undefined`
+
+Returns the Windows version name, or `undefined` if the version is not recognized or does not exist.
+
 #### release
 
 Type: `string`
