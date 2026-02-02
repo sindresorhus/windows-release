@@ -1,5 +1,6 @@
 import os from 'node:os';
 import {spawnSync} from 'node:child_process';
+import {executePowerShellSync} from 'powershell-utils';
 
 // Reference: https://www.gaijin.at/en/lstwinver.php
 // Windows 11 reference: https://docs.microsoft.com/en-us/windows/release-health/windows11-release-information
@@ -31,20 +32,12 @@ export default function windowsRelease(release) {
 
 	// Server 2008, 2012, 2016, and 2019 versions are ambiguous with desktop versions and must be detected at runtime.
 	// If `release` is omitted or we're on a Windows system, and the version number is an ambiguous version
-	// then use `wmic` to get the OS caption: https://msdn.microsoft.com/en-us/library/aa394531(v=vs.85).aspx
-	// If `wmic` is obsolete (later versions of Windows 10), use PowerShell instead.
-	// We force English output using /locale:ms_409 for wmic and setting CurrentUICulture for PowerShell
-	// to ensure year detection works on non-English Windows systems.
-	// If the resulting caption contains the year 2008, 2012, 2016, 2019, 2022, or 2025, it is a server version, so return a server OS name.
+	// then query the registry for the product name (always in English, no elevation required, works in restricted environments like Azure App Service).
+	// If the product name contains the year 2008, 2012, 2016, 2019, 2022, or 2025, it is a server version, so return a server OS name.
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(version)) {
 		try {
-			let stdout;
-			try {
-				stdout = spawnSync('wmic', ['/locale:ms_409', 'os', 'get', 'Caption'], {encoding: 'utf8'}).stdout || '';
-			} catch {
-				const command = '[Threading.Thread]::CurrentThread.CurrentUICulture = \'en-US\'; (Get-CimInstance -ClassName Win32_OperatingSystem).caption';
-				stdout = spawnSync('powershell', ['-NoProfile', '-Command', command], {encoding: 'utf8'}).stdout || '';
-			}
+			const stdout = spawnSync('reg', ['query', String.raw`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion`, '/v', 'ProductName'], {encoding: 'utf8'}).stdout
+				|| executePowerShellSync('(Get-CimInstance -ClassName Win32_OperatingSystem).caption');
 
 			const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
 
@@ -62,7 +55,7 @@ export default function windowsRelease(release) {
 			// Windows 11: build 22000 to 30000 (reasonable upper bound for future versions)
 			version = '10.0.2';
 		} else if (buildNumber >= 10_240 && buildNumber <= 19_045) {
-			// Windows 10: build 10240 to 19045 - keep ver as '10.0'
+			// Windows 10: build 10240 to 19045 - keep version as '10.0'
 		} else {
 			// Invalid build number - return undefined
 			return undefined;

@@ -39,6 +39,9 @@
 		"release",
 		"version"
 	],
+	"dependencies": {
+		"powershell-utils": "^0.2.0"
+	},
 	"devDependencies": {
 		"ava": "^6.4.1",
 		"xo": "^1.2.2"
