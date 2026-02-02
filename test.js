@@ -131,6 +131,14 @@ test('Windows 11 versions are correctly matched', t => {
 	}
 });
 
+test('gracefully handles server detection failure', t => {
+	// When wmic/powershell are unavailable, it should still return the desktop version
+	// Testing with an explicit release matching os.release() format for version 10.0
+	// On non-Windows systems, spawnSync for wmic/powershell will fail, and the function should not throw
+	t.notThrows(() => windowsRelease('10.0.19045'));
+	t.is(windowsRelease('10.0.19045'), '10');
+});
+
 test('returns undefined for non-existent Windows versions', t => {
 	// Non-existent Windows 10 build numbers (too high)
 	t.is(windowsRelease('10.0.90000'), undefined);

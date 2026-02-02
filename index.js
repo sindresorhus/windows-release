@@ -37,19 +37,21 @@ export default function windowsRelease(release) {
 	// to ensure year detection works on non-English Windows systems.
 	// If the resulting caption contains the year 2008, 2012, 2016, 2019, 2022, or 2025, it is a server version, so return a server OS name.
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(version)) {
-		let stdout;
 		try {
-			stdout = spawnSync('wmic', ['/locale:ms_409', 'os', 'get', 'Caption'], {encoding: 'utf8'}).stdout || '';
-		} catch {
-			const command = '[Threading.Thread]::CurrentThread.CurrentUICulture = \'en-US\'; (Get-CimInstance -ClassName Win32_OperatingSystem).caption';
-			stdout = spawnSync('powershell', ['-NoProfile', '-Command', command], {encoding: 'utf8'}).stdout || '';
-		}
+			let stdout;
+			try {
+				stdout = spawnSync('wmic', ['/locale:ms_409', 'os', 'get', 'Caption'], {encoding: 'utf8'}).stdout || '';
+			} catch {
+				const command = '[Threading.Thread]::CurrentThread.CurrentUICulture = \'en-US\'; (Get-CimInstance -ClassName Win32_OperatingSystem).caption';
+				stdout = spawnSync('powershell', ['-NoProfile', '-Command', command], {encoding: 'utf8'}).stdout || '';
+			}
 
-		const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
+			const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
 
-		if (year) {
-			return `Server ${year}`;
-		}
+			if (year) {
+				return `Server ${year}`;
+			}
+		} catch {}
 	}
 
 	// Windows 11 and Windows 10 build number validation for version 10.0
