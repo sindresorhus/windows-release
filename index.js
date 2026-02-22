@@ -20,6 +20,33 @@ const names = new Map([
 	['4.00', '95'],
 ]);
 
+const ntCurrentVersionKey = String.raw`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion`;
+
+// Server editions share version numbers with desktop editions (e.g., 10.0.26100 is both Windows 11 24H2 and Server 2025).
+// The InstallationType registry value reliably identifies server installations.
+// The CIM caption always reflects the correct server name, unlike the ProductName registry value
+// which may report an older version on newer Windows Server editions.
+function detectServerRelease() {
+	const {stdout: installationType} = spawnSync('reg', ['query', ntCurrentVersionKey, '/v', 'InstallationType'], {encoding: 'utf8'});
+
+	if (installationType && !installationType.includes('Server')) {
+		return;
+	}
+
+	let caption;
+	try {
+		caption = executePowerShellSync('(Get-CimInstance -ClassName Win32_OperatingSystem).caption');
+	} catch {}
+
+	// Less reliable fallback for restricted environments where PowerShell is unavailable.
+	caption ||= spawnSync('reg', ['query', ntCurrentVersionKey, '/v', 'ProductName'], {encoding: 'utf8'}).stdout;
+
+	const year = caption?.match(/Server\s+(\d{4})/)?.[1];
+	if (year) {
+		return `Server ${year}`;
+	}
+}
+
 export default function windowsRelease(release) {
 	const versionMatch = /(\d+\.\d+)(?:\.(\d+))?/.exec(release || os.release());
 
@@ -30,19 +57,11 @@ export default function windowsRelease(release) {
 	let version = versionMatch[1] ?? '';
 	const build = versionMatch[2] ?? '';
 
-	// Server 2008, 2012, 2016, and 2019 versions are ambiguous with desktop versions and must be detected at runtime.
-	// If `release` is omitted or we're on a Windows system, and the version number is an ambiguous version
-	// then query the registry for the product name (always in English, no elevation required, works in restricted environments like Azure App Service).
-	// If the product name contains the year 2008, 2012, 2016, 2019, 2022, or 2025, it is a server version, so return a server OS name.
 	if ((!release || release === os.release()) && ['6.1', '6.2', '6.3', '10.0'].includes(version)) {
 		try {
-			const stdout = spawnSync('reg', ['query', String.raw`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion`, '/v', 'ProductName'], {encoding: 'utf8'}).stdout
-				|| executePowerShellSync('(Get-CimInstance -ClassName Win32_OperatingSystem).caption');
-
-			const year = (stdout.match(/2008|2012|2016|2019|2022|2025/) || [])[0];
-
-			if (year) {
-				return `Server ${year}`;
+			const serverRelease = detectServerRelease();
+			if (serverRelease) {
+				return serverRelease;
 			}
 		} catch {}
 	}

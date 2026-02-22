@@ -115,7 +115,7 @@ test('Windows 8.1 versions are correctly matched', t => {
 
 test('Windows 10 versions are correctly matched', t => {
 	const expected = '10';
-	const versions = ['10.0.10240', '10.0.10586', '10.0.14393'];
+	const versions = ['10.0.10240', '10.0.10586', '10.0.14393', '10.0.19045'];
 
 	for (const version of versions) {
 		t.is(windowsRelease(version), expected);
@@ -124,22 +124,47 @@ test('Windows 10 versions are correctly matched', t => {
 
 test('Windows 11 versions are correctly matched', t => {
 	const expected = '11';
-	const versions = ['10.0.22000', '10.0.26100'];
+	const versions = ['10.0.22000', '10.0.26100', '10.0.30000'];
 
 	for (const version of versions) {
 		t.is(windowsRelease(version), expected);
 	}
 });
 
-test('returns undefined for non-existent Windows versions', t => {
-	// Non-existent Windows 10 build numbers (too high)
-	t.is(windowsRelease('10.0.90000'), undefined);
-	t.is(windowsRelease('10.0.50000'), undefined);
+test('Windows 11 with four-segment version string', t => {
+	t.is(windowsRelease('10.0.22000.1234'), '11');
+});
 
-	// Non-existent Windows 11 build numbers (too low)
-	t.is(windowsRelease('10.0.21999'), undefined);
-	t.is(windowsRelease('10.0.20000'), undefined);
+test('version without build number', t => {
+	t.is(windowsRelease('10.0'), '10');
+	t.is(windowsRelease('6.1'), '7');
+	t.is(windowsRelease('6.0'), 'Vista');
+	t.is(windowsRelease('5.1'), 'XP');
+});
+
+test('returns undefined for non-existent Windows versions', t => {
+	// Just outside Windows 10 build range
+	t.is(windowsRelease('10.0.10239'), undefined);
+	t.is(windowsRelease('10.0.19046'), undefined);
 
 	// Gap between Windows 10 and 11
 	t.is(windowsRelease('10.0.21000'), undefined);
+	t.is(windowsRelease('10.0.21999'), undefined);
+
+	// Just outside Windows 11 build range
+	t.is(windowsRelease('10.0.30001'), undefined);
+
+	// Very low build numbers for 10.0
+	t.is(windowsRelease('10.0.0'), undefined);
+	t.is(windowsRelease('10.0.9999'), undefined);
+});
+
+test('returns undefined for unknown version numbers', t => {
+	t.is(windowsRelease('7.0.1234'), undefined);
+	t.is(windowsRelease('3.0.1234'), undefined);
+	t.is(windowsRelease('11.0.1234'), undefined);
+});
+
+test('throws on invalid release string', t => {
+	t.throws(() => windowsRelease('foo'), {message: /`release` argument doesn't match `n\.n`/});
 });

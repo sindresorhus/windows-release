@@ -23,7 +23,7 @@ os.release();
 windowsRelease(os.release());
 //=> 'XP'
 
-windowsRelease('4.9.3000');
+windowsRelease('4.90.3000');
 //=> 'ME'
 ```
 */
